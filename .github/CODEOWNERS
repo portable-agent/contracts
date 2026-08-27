@@ -1,0 +1,4 @@
+* @portable-agent/maintainers
+/openapi/ @portable-agent/backend
+/asyncapi/ @portable-agent/backend @portable-agent/agent-runtime
+/schemas/ @portable-agent/backend @portable-agent/frontend-integrations

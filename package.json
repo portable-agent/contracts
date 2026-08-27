@@ -1,0 +1,23 @@
+{
+  "name": "@portable-agent/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "redocly lint openapi/*.yaml && prettier --check .",
+    "test": "node --test test/*.test.mjs",
+    "build": "redocly build-docs openapi/action-api.yaml --output dist/action-api.html",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@asyncapi/parser": "3.6.3",
+    "@redocly/cli": "2.2.1",
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
+    "prettier": "3.6.2",
+    "yaml": "2.8.1"
+  }
+}

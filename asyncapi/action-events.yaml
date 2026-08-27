@@ -1,0 +1,77 @@
+asyncapi: 3.0.0
+info:
+  title: Portable Agent Action Events
+  version: 1.0.0
+  description: События жизненного цикла безопасных действий.
+defaultContentType: application/json
+servers:
+  localKafka:
+    host: localhost:9092
+    protocol: kafka
+channels:
+  actionLifecycle:
+    address: portable-agent.action.lifecycle.v1
+    messages:
+      actionStatusChanged:
+        $ref: "#/components/messages/ActionStatusChanged"
+operations:
+  publishActionStatusChanged:
+    action: send
+    channel:
+      $ref: "#/channels/actionLifecycle"
+    messages:
+      - $ref: "#/channels/actionLifecycle/messages/actionStatusChanged"
+components:
+  messages:
+    ActionStatusChanged:
+      name: ActionStatusChanged
+      title: Состояние действия изменилось
+      payload:
+        $ref: "#/components/schemas/ActionEvent"
+  schemas:
+    ActionEvent:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          eventId,
+          eventType,
+          eventVersion,
+          occurredAt,
+          tenantId,
+          correlationId,
+          producer,
+          payload,
+        ]
+      properties:
+        eventId: { type: string, format: uuid }
+        eventType: { const: action.status-changed }
+        eventVersion: { const: 1 }
+        occurredAt: { type: string, format: date-time }
+        tenantId: { type: string, format: uuid }
+        actorId: { type: string, format: uuid }
+        correlationId: { type: string, format: uuid }
+        causationId: { type: string, format: uuid }
+        producer: { const: action-service }
+        traceparent: { type: string }
+        payload:
+          type: object
+          additionalProperties: false
+          required: [actionId, status, kind, connector, payloadHash]
+          properties:
+            actionId: { type: string, format: uuid }
+            status:
+              type: string
+              enum:
+                [
+                  PROPOSED,
+                  AWAITING_APPROVAL,
+                  APPROVED,
+                  EXECUTING,
+                  SUCCEEDED,
+                  FAILED,
+                  CANCELLED,
+                ]
+            kind: { type: string }
+            connector: { type: string }
+            payloadHash: { type: string, pattern: "^[a-f0-9]{64}$" }

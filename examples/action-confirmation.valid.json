@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "widget": "action_confirmation",
+  "actionId": "6c92fa39-4c85-4dc4-9661-018e1602de2f",
+  "payloadHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "title": "Создать встречу",
+  "fields": [
+    { "label": "Когда", "value": "29 августа, 14:00" },
+    { "label": "Участник", "value": "Коля", "sensitive": true }
+  ],
+  "actions": [
+    { "id": "confirm", "label": "Подтвердить" },
+    { "id": "cancel", "label": "Отменить" }
+  ]
+}

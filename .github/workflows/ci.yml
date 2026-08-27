@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    uses: portable-agent/.github/.github/workflows/reusable-node.yml@main
+    with:
+      node-version: "24"
