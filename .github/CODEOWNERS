@@ -2,3 +2,7 @@
 /openapi/ @portable-agent/backend
 /asyncapi/ @portable-agent/backend @portable-agent/agent-runtime
 /schemas/ @portable-agent/backend @portable-agent/frontend-integrations
+/docs/ @portable-agent/maintainers @portable-agent/backend
+/README.md @portable-agent/maintainers
+/AGENTS.md @portable-agent/maintainers
+/catalog-info.yaml @portable-agent/maintainers

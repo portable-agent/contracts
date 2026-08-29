@@ -2,8 +2,10 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: portable-agent-contracts
+  title: Контракты Portable Agent
   description: OpenAPI, AsyncAPI и JSON Schema контракты платформы
   annotations:
+    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: portable-agent/contracts
 spec:
   type: library

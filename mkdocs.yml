@@ -1,0 +1,11 @@
+site_name: Контракты Portable Agent
+site_description: OpenAPI, AsyncAPI и JSON Schema платформы
+docs_dir: docs
+strict: true
+nav:
+  - Главная: index.md
+  - Архитектура: architecture.md
+  - Разработка: development.md
+  - Эксплуатация: runbook.md
+  - Решения:
+      - Контракты отдельно от сервисов: decisions/0001-contracts-source.md

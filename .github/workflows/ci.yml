@@ -13,3 +13,5 @@ jobs:
     uses: portable-agent/.github/.github/workflows/reusable-node.yml@main
     with:
       node-version: "24"
+  docs:
+    uses: portable-agent/.github/.github/workflows/reusable-docs.yml@main
