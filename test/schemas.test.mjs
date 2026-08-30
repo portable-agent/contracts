@@ -27,3 +27,27 @@ test("confirmation widget rejects an altered payload hash", async () => {
 
   assert.equal(valid, false);
 });
+
+test("calendar create event example matches its public schema", async () => {
+  const ajv = new Ajv2020({ allErrors: true });
+  addFormats(ajv);
+  const schema = await readJson("schemas/calendar-create-event.schema.json");
+  const example = await readJson("examples/calendar-create-event.valid.json");
+
+  const valid = ajv.validate(schema, example);
+
+  assert.equal(valid, true, JSON.stringify(ajv.errors));
+  assert.ok(Date.parse(example.endAt) > Date.parse(example.startAt));
+});
+
+test("calendar create event rejects missing time zone", async () => {
+  const ajv = new Ajv2020({ allErrors: true });
+  addFormats(ajv);
+  const schema = await readJson("schemas/calendar-create-event.schema.json");
+  const example = await readJson("examples/calendar-create-event.valid.json");
+  const { timeZone: _timeZone, ...withoutTimeZone } = example;
+
+  const valid = ajv.validate(schema, withoutTimeZone);
+
+  assert.equal(valid, false);
+});
