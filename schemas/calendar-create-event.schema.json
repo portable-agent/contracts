@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portable-agent.dev/contracts/actions/calendar-create-event.schema.json",
+  "title": "Calendar create event payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "startAt", "endAt", "timeZone"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": ".*\\S.*"
+    },
+    "startAt": { "type": "string", "format": "date-time" },
+    "endAt": { "type": "string", "format": "date-time" },
+    "timeZone": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^(UTC|[A-Za-z_]+(?:/[A-Za-z0-9_+-]+)+)$"
+    },
+    "description": { "type": "string", "maxLength": 2000 },
+    "attendees": {
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": { "type": "string", "format": "email", "maxLength": 254 }
+    }
+  }
+}

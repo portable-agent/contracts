@@ -28,6 +28,7 @@ Breaking changes публикуются только новой major-верси
 ## Документация
 
 - [Архитектура](docs/architecture.md)
+- [Контракт создания встречи](docs/calendar-event.md)
 - [Разработка](docs/development.md)
 - [Диагностика](docs/runbook.md)
 - [Правила для AI-агентов](AGENTS.md)
