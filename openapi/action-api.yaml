@@ -107,6 +107,7 @@ components:
         payload:
           type: object
           minProperties: 1
+          additionalProperties: true
         requestKey:
           type: string
           minLength: 8
@@ -154,6 +155,7 @@ components:
         connector: { type: string }
         payload:
           type: object
+          additionalProperties: true
           description: Сохранённые данные, которые пользователь подтверждает по payloadHash.
         payloadHash: { type: string, pattern: "^[a-f0-9]{64}$" }
         createdAt: { type: string, format: date-time }

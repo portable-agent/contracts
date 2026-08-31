@@ -4,8 +4,59 @@ import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import YAML from "yaml";
+import {
+  checkBreakingPolicy,
+  readVersion,
+} from "../scripts/check-breaking-policy.mjs";
 
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
+
+test("breaking policy reads the real OpenAPI version", async () => {
+  const source = await readFile("openapi/action-api.yaml", "utf8");
+  assert.equal(readVersion(source), "1.0.0");
+});
+
+test("breaking change needs approval, new major and migration guide", () => {
+  assert.throws(
+    () =>
+      checkBreakingPolicy({
+        baseVersion: "1.2.0",
+        nextVersion: "2.0.0",
+        approved: false,
+        migrationExists: true,
+      }),
+    /breaking-change-approved/,
+  );
+  assert.throws(
+    () =>
+      checkBreakingPolicy({
+        baseVersion: "1.2.0",
+        nextVersion: "1.3.0",
+        approved: true,
+        migrationExists: true,
+      }),
+    /major/,
+  );
+  assert.doesNotThrow(() =>
+    checkBreakingPolicy({
+      baseVersion: "1.2.0",
+      nextVersion: "2.0.0",
+      approved: true,
+      migrationExists: true,
+    }),
+  );
+});
+
+test("all contract files use the package version", async () => {
+  const packageData = await readJson("package.json");
+  const openApi = YAML.parse(await readFile("openapi/action-api.yaml", "utf8"));
+  const asyncApi = YAML.parse(
+    await readFile("asyncapi/action-events.yaml", "utf8"),
+  );
+
+  assert.equal(openApi.info.version, packageData.version);
+  assert.equal(asyncApi.info.version, packageData.version);
+});
 
 test("action response contains the stored payload", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
@@ -27,6 +78,7 @@ test("action request uses the service request key", async () => {
   assert.deepEqual(request.properties.kind.enum, ["calendar.create_event"]);
   assert.deepEqual(request.properties.connector.enum, ["fake-calendar"]);
   assert.equal(request.properties.payload.minProperties, 1);
+  assert.equal(request.properties.payload.additionalProperties, true);
   assert.ok(api.paths["/api/v1/actions"].post.responses["409"]);
 });
 
