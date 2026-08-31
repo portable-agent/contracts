@@ -31,6 +31,8 @@ paths:
                 $ref: "#/components/schemas/ActionResponse"
         "400":
           $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
   /api/v1/actions/{actionId}:
     get:
       operationId: getAction
@@ -94,21 +96,18 @@ components:
     ProposeActionRequest:
       type: object
       additionalProperties: false
-      required: [kind, connector, payload, idempotencyKey]
+      required: [kind, connector, payload, requestKey]
       properties:
         kind:
           type: string
-          minLength: 1
-          maxLength: 80
-          examples: [calendar.create_event]
+          enum: [calendar.create_event]
         connector:
           type: string
-          minLength: 1
-          maxLength: 80
-          examples: [google-calendar]
+          enum: [fake-calendar]
         payload:
           type: object
-        idempotencyKey:
+          minProperties: 1
+        requestKey:
           type: string
           minLength: 8
           maxLength: 128
@@ -126,7 +125,17 @@ components:
     ActionResponse:
       type: object
       additionalProperties: false
-      required: [id, status, kind, connector, payloadHash, createdAt, updatedAt]
+      required:
+        [
+          id,
+          status,
+          kind,
+          connector,
+          payload,
+          payloadHash,
+          createdAt,
+          updatedAt,
+        ]
       properties:
         id: { type: string, format: uuid }
         status:
@@ -143,6 +152,9 @@ components:
             ]
         kind: { type: string }
         connector: { type: string }
+        payload:
+          type: object
+          description: Сохранённые данные, которые пользователь подтверждает по payloadHash.
         payloadHash: { type: string, pattern: "^[a-f0-9]{64}$" }
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
