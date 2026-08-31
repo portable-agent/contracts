@@ -3,8 +3,32 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import YAML from "yaml";
 
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
+
+test("action response contains the stored payload", async () => {
+  const source = await readFile("openapi/action-api.yaml", "utf8");
+  const api = YAML.parse(source);
+  const response = api.components.schemas.ActionResponse;
+
+  assert.ok(response.required.includes("payload"));
+  assert.equal(response.properties.payload.type, "object");
+});
+
+test("action request uses the service request key", async () => {
+  const source = await readFile("openapi/action-api.yaml", "utf8");
+  const api = YAML.parse(source);
+  const request = api.components.schemas.ProposeActionRequest;
+
+  assert.ok(request.required.includes("requestKey"));
+  assert.equal(request.properties.requestKey.type, "string");
+  assert.equal(request.properties.idempotencyKey, undefined);
+  assert.deepEqual(request.properties.kind.enum, ["calendar.create_event"]);
+  assert.deepEqual(request.properties.connector.enum, ["fake-calendar"]);
+  assert.equal(request.properties.payload.minProperties, 1);
+  assert.ok(api.paths["/api/v1/actions"].post.responses["409"]);
+});
 
 test("action confirmation example matches its public schema", async () => {
   const ajv = new Ajv2020({ allErrors: true });
