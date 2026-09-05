@@ -16,6 +16,15 @@ test("breaking policy reads the real OpenAPI version", async () => {
   assert.equal(readVersion(source), "1.0.0");
 });
 
+test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {
+  const workflow = await readFile(".github/workflows/ci.yml", "utf8");
+
+  assert.match(
+    workflow,
+    /if: steps\.compatibility\.outputs\.breaking != 'No breaking changes'/,
+  );
+});
+
 test("breaking change needs approval, new major and migration guide", () => {
   assert.throws(
     () =>

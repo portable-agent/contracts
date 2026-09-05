@@ -23,7 +23,7 @@ jobs:
           base: origin/${{ github.base_ref }}:openapi/action-api.yaml
           revision: HEAD:openapi/action-api.yaml
       - name: Проверить правила breaking change
-        if: steps.compatibility.outputs.breaking != ''
+        if: steps.compatibility.outputs.breaking != 'No breaking changes'
         env:
           BREAKING_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'breaking-change-approved') }}
         run: node scripts/check-breaking-policy.mjs "origin/${{ github.base_ref }}"
