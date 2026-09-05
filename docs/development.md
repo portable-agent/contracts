@@ -19,6 +19,16 @@ pnpm build
 pwsh ./scripts/check-docs.ps1
 ```
 
+## Новая версия
+
+1. Измените одну и ту же SemVer-версию в `package.json`, OpenAPI и AsyncAPI.
+2. Для breaking change увеличьте major, добавьте `docs/migrations/X.Y.Z.md` и попросите maintainer
+   поставить метку `breaking-change-approved`.
+3. После зелёного `main` создайте тег `vX.Y.Z`.
+4. Release workflow проверит тег и опубликует bundle спецификаций.
+
+Сервис хранит только закреплённый снимок bundle. Файлы внутри снимка нельзя менять вручную.
+
 ## Имена
 
 Используйте короткие и понятные слова: `id`, `type`, `name`, `status`, `result`, `createdAt`.

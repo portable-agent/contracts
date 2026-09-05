@@ -23,7 +23,16 @@ pnpm test
 pnpm build
 ```
 
-Breaking changes публикуются только новой major-версией контракта и сопровождаются migration guide.
+Breaking changes публикуются только новой major-версией контракта, сопровождаются migration guide и
+меткой `breaking-change-approved`, которую ставит maintainer. `oasdiff` автоматически сравнивает
+OpenAPI в pull request с `main` и блокирует нарушение этих правил.
+
+## Версии и release
+
+Версия в `package.json`, OpenAPI и AsyncAPI должна совпадать. Тег `vX.Y.Z` запускает release workflow.
+Он проверяет репозиторий и прикладывает к GitHub Release bundle `portable-agent-contracts-X.Y.Z.tgz`.
+Bundle получает SHA-256 и GitHub artifact attestation. Сервисы используют закреплённую версию bundle
+и не загружают `main` во время сборки.
 
 ## Документация
 

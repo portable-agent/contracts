@@ -9,9 +9,27 @@ permissions:
   contents: read
 
 jobs:
+  compatibility:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+      - name: Проверить обратную совместимость OpenAPI
+        id: compatibility
+        uses: oasdiff/oasdiff-action/breaking@54d7a752569cb30b644b7f27a362c1077973d1c0 # v0.1.14
+        with:
+          base: origin/${{ github.base_ref }}:openapi/action-api.yaml
+          revision: HEAD:openapi/action-api.yaml
+      - name: Проверить правила breaking change
+        if: steps.compatibility.outputs.breaking != 'No breaking changes'
+        env:
+          BREAKING_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'breaking-change-approved') }}
+        run: node scripts/check-breaking-policy.mjs "origin/${{ github.base_ref }}"
   contracts:
-    uses: portable-agent/.github/.github/workflows/reusable-node.yml@main
+    uses: portable-agent/.github/.github/workflows/reusable-node.yml@ed34f26071893063cf70bcd5c784d15d6c4fb5b7
     with:
       node-version: "24"
   docs:
-    uses: portable-agent/.github/.github/workflows/reusable-docs.yml@main
+    uses: portable-agent/.github/.github/workflows/reusable-docs.yml@ed34f26071893063cf70bcd5c784d15d6c4fb5b7

@@ -1,7 +1,15 @@
 {
   "name": "@portable-agent/contracts",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "files": [
+    "openapi",
+    "asyncapi",
+    "schemas",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
   "packageManager": "pnpm@10.17.1",
   "engines": {
     "node": ">=24"
@@ -10,6 +18,7 @@
     "lint": "redocly lint openapi/*.yaml && prettier --check .",
     "test": "node --test test/*.test.mjs",
     "build": "redocly build-docs openapi/action-api.yaml --output dist/action-api.html",
+    "pack:contracts": "pnpm pack --pack-destination dist",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
