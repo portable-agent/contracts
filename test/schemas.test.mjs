@@ -13,7 +13,7 @@ const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("breaking policy reads the real OpenAPI version", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
-  assert.equal(readVersion(source), "1.0.0");
+  assert.equal(readVersion(source), "1.1.0");
 });
 
 test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {
@@ -74,6 +74,30 @@ test("action response contains the stored payload", async () => {
 
   assert.ok(response.required.includes("payload"));
   assert.equal(response.properties.payload.type, "object");
+});
+
+test("successful calendar action exposes a stable event id", async () => {
+  const source = await readFile("openapi/action-api.yaml", "utf8");
+  const api = YAML.parse(source);
+  const asyncApi = YAML.parse(
+    await readFile("asyncapi/action-events.yaml", "utf8"),
+  );
+  const response = api.components.schemas.ActionResponse;
+  const result = api.components.schemas.CalendarActionResult;
+  const eventResult =
+    asyncApi.components.schemas.ActionEvent.properties.payload.properties
+      .result;
+
+  assert.equal(response.required.includes("result"), false);
+  assert.equal(
+    response.properties.result.$ref,
+    "#/components/schemas/CalendarActionResult",
+  );
+  assert.deepEqual(result.required, ["eventId"]);
+  assert.equal(result.additionalProperties, false);
+  assert.equal(result.properties.eventId.type, "string");
+  assert.equal(result.properties.eventId.minLength, 1);
+  assert.equal(eventResult.$ref, "#/components/schemas/CalendarActionResult");
 });
 
 test("action request uses the service request key", async () => {
