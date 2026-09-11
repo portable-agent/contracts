@@ -38,6 +38,7 @@ Bundle получает SHA-256 и GitHub artifact attestation. Сервисы �
 
 - [Архитектура](docs/architecture.md)
 - [Контракт создания встречи](docs/calendar-event.md)
+- [Контракт MCP Gateway](docs/mcp-gateway.md)
 - [Разработка](docs/development.md)
 - [Диагностика](docs/runbook.md)
 - [Правила для AI-агентов](AGENTS.md)

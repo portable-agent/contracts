@@ -6,6 +6,7 @@ nav:
   - Главная: index.md
   - Архитектура: architecture.md
   - Создание встречи: calendar-event.md
+  - MCP Gateway API: mcp-gateway.md
   - Разработка: development.md
   - Эксплуатация: runbook.md
   - Решения:
