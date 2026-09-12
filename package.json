@@ -1,6 +1,6 @@
 {
   "name": "@portable-agent/contracts",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "files": [
     "openapi",
@@ -17,7 +17,7 @@
   "scripts": {
     "lint": "redocly lint openapi/*.yaml && prettier --check .",
     "test": "node --test test/*.test.mjs",
-    "build": "redocly build-docs openapi/action-api.yaml --output dist/action-api.html && redocly build-docs openapi/mcp-gateway-api.yaml --output dist/mcp-gateway-api.html",
+    "build": "redocly build-docs openapi/action-api.yaml --output dist/action-api.html && redocly build-docs openapi/mcp-gateway-api.yaml --output dist/mcp-gateway-api.html && redocly build-docs openapi/agent-runtime-api.yaml --output dist/agent-runtime-api.html",
     "pack:contracts": "pnpm pack --pack-destination dist",
     "format:check": "prettier --check ."
   },

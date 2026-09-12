@@ -1,0 +1,8 @@
+{
+  "text": "Создай встречу с командой завтра в 12:00",
+  "context": {
+    "locale": "ru-RU",
+    "timeZone": "Europe/Moscow",
+    "availableConnectors": ["fake-calendar"]
+  }
+}
