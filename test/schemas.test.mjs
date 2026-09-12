@@ -13,7 +13,7 @@ const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("breaking policy reads the real OpenAPI version", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
-  assert.equal(readVersion(source), "1.2.0");
+  assert.equal(readVersion(source), "2.0.0");
 });
 
 test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {
@@ -77,7 +77,10 @@ test("action response contains the stored payload", async () => {
   const response = api.components.schemas.ActionResponse;
 
   assert.ok(response.required.includes("payload"));
-  assert.equal(response.properties.payload.type, "object");
+  assert.equal(
+    response.properties.payload.$ref,
+    "#/components/schemas/CalendarCreateEventPayload",
+  );
 });
 
 test("successful calendar action exposes a stable event id", async () => {
@@ -114,9 +117,24 @@ test("action request uses the service request key", async () => {
   assert.equal(request.properties.idempotencyKey, undefined);
   assert.deepEqual(request.properties.kind.enum, ["calendar.create_event"]);
   assert.deepEqual(request.properties.connector.enum, ["fake-calendar"]);
-  assert.equal(request.properties.payload.minProperties, 1);
-  assert.equal(request.properties.payload.additionalProperties, true);
+  assert.equal(
+    request.properties.payload.$ref,
+    "#/components/schemas/CalendarCreateEventPayload",
+  );
   assert.ok(api.paths["/api/v1/actions"].post.responses["409"]);
+});
+
+test("action API uses the shared calendar payload shape", async () => {
+  const source = await readFile("openapi/action-api.yaml", "utf8");
+  const api = YAML.parse(source);
+  const schema = await readJson("schemas/calendar-create-event.schema.json");
+  const { $schema: _draft, $id: _id, title: _title, ...shape } = schema;
+
+  assert.deepEqual(api.components.schemas.CalendarCreateEventPayload, shape);
+  assert.equal(
+    api.components.schemas.ActionResponse.properties.payload.$ref,
+    "#/components/schemas/CalendarCreateEventPayload",
+  );
 });
 
 test("action confirmation example matches its public schema", async () => {
