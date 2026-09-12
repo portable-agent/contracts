@@ -12,18 +12,32 @@ jobs:
   compatibility:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        contract: [action-api, mcp-gateway-api, agent-runtime-api]
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
+      - name: Проверить наличие контракта в main
+        id: base-file
+        shell: bash
+        run: |
+          if git cat-file -e "origin/${GITHUB_BASE_REF}:openapi/${{ matrix.contract }}.yaml"; then
+            echo "exists=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "exists=false" >> "${GITHUB_OUTPUT}"
+          fi
       - name: Проверить обратную совместимость OpenAPI
+        if: steps.base-file.outputs.exists == 'true'
         id: compatibility
         uses: oasdiff/oasdiff-action/breaking@54d7a752569cb30b644b7f27a362c1077973d1c0 # v0.1.14
         with:
-          base: origin/${{ github.base_ref }}:openapi/action-api.yaml
-          revision: HEAD:openapi/action-api.yaml
+          base: origin/${{ github.base_ref }}:openapi/${{ matrix.contract }}.yaml
+          revision: HEAD:openapi/${{ matrix.contract }}.yaml
       - name: Проверить правила breaking change
-        if: steps.compatibility.outputs.breaking != 'No breaking changes'
+        if: steps.base-file.outputs.exists == 'true' && steps.compatibility.outputs.breaking != 'No breaking changes'
         env:
           BREAKING_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'breaking-change-approved') }}
         run: node scripts/check-breaking-policy.mjs "origin/${{ github.base_ref }}"
