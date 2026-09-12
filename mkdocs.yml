@@ -9,5 +9,7 @@ nav:
   - MCP Gateway API: mcp-gateway.md
   - Разработка: development.md
   - Эксплуатация: runbook.md
+  - Миграции:
+      - Версия 2.0.0: migrations/2.0.0.md
   - Решения:
       - Контракты отдельно от сервисов: decisions/0001-contracts-source.md

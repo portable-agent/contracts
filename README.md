@@ -29,6 +29,9 @@ OpenAPI в pull request с `main` и блокирует нарушение эт�
 
 ## Версии и release
 
+Текущая версия — `2.0.0`. Переход с `1.x` описан в
+[migration guide](docs/migrations/2.0.0.md).
+
 Версия в `package.json`, OpenAPI и AsyncAPI должна совпадать. Тег `vX.Y.Z` запускает release workflow.
 Он проверяет репозиторий и прикладывает к GitHub Release bundle `portable-agent-contracts-X.Y.Z.tgz`.
 Bundle получает SHA-256 и GitHub artifact attestation. Сервисы используют закреплённую версию bundle
