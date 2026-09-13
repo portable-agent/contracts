@@ -12,4 +12,5 @@
 Начните с [архитектуры](architecture.md), затем прочитайте [правила разработки](development.md).
 Внутренний вызов MCP описан в [MCP Gateway API](mcp-gateway.md).
 Подготовка предложения из текста описана в [Agent Runtime API](agent-runtime.md).
+Общий текстовый вход каналов описан в [Channel Gateway API](channel-gateway.md).
 Для перехода с `1.x` на текущую версию откройте [migration guide 2.0.0](migrations/2.0.0.md).
