@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: cd dist && sha256sum *.tgz > SHA256SUMS
       - name: Подписать происхождение bundle
-        uses: actions/attest-build-provenance@46a583fd92dfbf46b772907a9740f888f4324bb9 # v3.1.0
+        uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         with:
           subject-path: dist/*.tgz
       - name: Создать GitHub Release
