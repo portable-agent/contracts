@@ -57,6 +57,14 @@ test("proposal response reuses the calendar payload", async () => {
     api.components.schemas.ActionPlan.properties.payload.$ref,
     "#/components/schemas/CalendarCreateEventPayload",
   );
+  assert.deepEqual(
+    api.components.schemas.ActionPlan.properties.requiresApproval.enum,
+    [true],
+  );
+  assert.equal(
+    api.components.schemas.ActionPlan.properties.requiresApproval.const,
+    undefined,
+  );
 });
 
 test("compatibility workflow checks every OpenAPI contract", async () => {

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Portable Agent Channel Gateway API
-  version: 2.3.0
+  version: 2.3.1
   description: Единый текстовый вход для независимых каналов пользователя.
   license:
     name: Apache-2.0
