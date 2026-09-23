@@ -67,6 +67,21 @@ test("conversation message reuses Conversation Service request and response", as
   assert.deepEqual(create.security, [{ bearerAuth: [] }]);
 });
 
+test("action decision reuses Action API request and response", async () => {
+  const api = await readApi();
+  const decide = api.paths["/api/v1/actions/{actionId}/decisions"].post;
+
+  assert.equal(
+    decide.requestBody.content["application/json"].schema.$ref,
+    "./action-api.yaml#/components/schemas/ActionDecisionRequest",
+  );
+  assert.equal(
+    decide.responses["202"].content["application/json"].schema.$ref,
+    "./action-api.yaml#/components/schemas/ActionResponse",
+  );
+  assert.deepEqual(decide.security, [{ bearerAuth: [] }]);
+});
+
 test("compatibility workflow checks Channel Gateway contract", async () => {
   const workflow = await readFile(".github/workflows/ci.yml", "utf8");
 

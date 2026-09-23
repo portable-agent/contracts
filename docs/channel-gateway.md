@@ -20,5 +20,8 @@
 [Conversation Service API](conversation-service.md). Новый `POST /api/v1/conversations/messages`
 передаёт сообщение в Conversation Service и возвращает вопрос или карточку. Старый
 `POST /api/v1/messages` временно сохраняет прямой маршрут в Agent Runtime для совместимости.
+`POST /api/v1/actions/{actionId}/decisions` принимает безопасную команду из Widget SDK и передаёт
+решение в Action Service с тем же Bearer JWT. Благодаря этому адаптер канала работает только с
+публичной границей Gateway и не знает адрес внутренних сервисов.
 Голос и файлы появятся отдельными совместимыми изменениями. Так текстовый контракт не привязан к
 конкретному мессенджеру.
