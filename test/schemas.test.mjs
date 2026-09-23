@@ -13,7 +13,7 @@ const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("breaking policy reads the real OpenAPI version", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
-  assert.equal(readVersion(source), "2.3.0");
+  assert.equal(readVersion(source), "2.4.0");
 });
 
 test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {

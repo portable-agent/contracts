@@ -52,6 +52,21 @@ test("message response reuses Agent Runtime proposal response", async () => {
   );
 });
 
+test("conversation message reuses Conversation Service request and response", async () => {
+  const api = await readApi();
+  const create = api.paths["/api/v1/conversations/messages"].post;
+
+  assert.equal(
+    create.requestBody.content["application/json"].schema.$ref,
+    "./conversation-api.yaml#/components/schemas/MessageRequest",
+  );
+  assert.equal(
+    create.responses["200"].content["application/json"].schema.$ref,
+    "./conversation-api.yaml#/components/schemas/MessageResponse",
+  );
+  assert.deepEqual(create.security, [{ bearerAuth: [] }]);
+});
+
 test("compatibility workflow checks Channel Gateway contract", async () => {
   const workflow = await readFile(".github/workflows/ci.yml", "utf8");
 
