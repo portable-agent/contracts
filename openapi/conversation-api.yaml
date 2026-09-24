@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Portable Agent Conversation API
-  version: 2.3.0
+  version: 2.5.0
   description: Внутренний API состояния диалога и оркестрации предложения действия.
   license:
     name: Apache-2.0
@@ -73,7 +73,7 @@ components:
         context:
           $ref: "#/components/schemas/MessageContext"
     MessageContext:
-      $ref: "./channel-gateway-api.yaml#/components/schemas/MessageContext"
+      $ref: "../schemas/message-context.schema.json"
     MessageResponse:
       type: object
       additionalProperties: false

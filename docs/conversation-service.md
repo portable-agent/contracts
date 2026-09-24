@@ -18,7 +18,9 @@
 - `text` — безопасный текстовый вопрос, если данных недостаточно;
 - `confirmation` — карточка уже сохранённого действия с `actionId` и `payloadHash`.
 
-Карточка использует `schemas/action-confirmation.schema.json`. Она не является командой выполнения.
+Контекст сообщения переиспользует `schemas/message-context.schema.json`, поэтому Channel Gateway и
+Conversation Service не образуют циклическую OpenAPI-ссылку. Карточка использует
+`schemas/action-confirmation.schema.json`. Она не является командой выполнения.
 Решение пользователя отправляется в Action API вместе с тем же `payloadHash`, поэтому изменённую или
 устаревшую карточку нельзя подтвердить молча.
 
