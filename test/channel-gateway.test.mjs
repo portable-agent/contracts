@@ -6,6 +6,7 @@ import YAML from "yaml";
 
 const readApi = async () =>
   YAML.parse(await readFile("openapi/channel-gateway-api.yaml", "utf8"));
+const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("Channel Gateway exposes one protected message endpoint", async () => {
   const api = await readApi();
@@ -21,7 +22,7 @@ test("Channel Gateway exposes one protected message endpoint", async () => {
 test("message request is channel-neutral and contains no identity", async () => {
   const api = await readApi();
   const request = api.components.schemas.MessageRequest;
-  const context = api.components.schemas.MessageContext;
+  const context = await readJson("schemas/message-context.schema.json");
   const example = JSON.parse(
     await readFile("examples/channel-message.valid.json", "utf8"),
   );
@@ -37,6 +38,10 @@ test("message request is channel-neutral and contains no identity", async () => 
   assert.equal(context.properties.availableConnectors, undefined);
   assert.equal(request.additionalProperties, false);
   assert.equal(context.additionalProperties, false);
+  assert.equal(
+    api.components.schemas.MessageContext.$ref,
+    "../schemas/message-context.schema.json",
+  );
 });
 
 test("message response reuses Agent Runtime proposal response", async () => {

@@ -35,6 +35,10 @@ test("message request can continue an existing conversation", async () => {
   assert.equal(message.properties.userId, undefined);
   assert.equal(message.properties.tenantId, undefined);
   assert.equal(message.additionalProperties, false);
+  assert.equal(
+    api.components.schemas.MessageContext.$ref,
+    "../schemas/message-context.schema.json",
+  );
 });
 
 test("message response has ids and one typed reply", async () => {
