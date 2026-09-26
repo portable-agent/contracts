@@ -27,13 +27,28 @@ test("MCP call example matches the request schema", async () => {
   );
   const example = await readJson("examples/mcp-call.valid.json");
   const schema = api.components.schemas.McpCallRequest;
+  const testSchema = structuredClone(schema);
+  testSchema.properties.context = api.components.schemas.ExecutionContext;
   const ajv = new Ajv2020({ allErrors: true });
   addFormats(ajv);
 
-  assert.equal(ajv.validate(schema, example), true, JSON.stringify(ajv.errors));
+  assert.equal(
+    ajv.validate(testSchema, example),
+    true,
+    JSON.stringify(ajv.errors),
+  );
   assert.equal(schema.additionalProperties, false);
   assert.ok(schema.required.includes("requestKey"));
   assert.equal(schema.properties.url, undefined);
+  assert.equal(example.context.actorId, "28efc74e-e82b-4ea2-9143-4dc24c13fe0d");
+  assert.equal("actorId" in example.input, false);
+  assert.deepEqual(api.components.schemas.ExecutionContext.required, [
+    "actorId",
+  ]);
+  assert.equal(
+    api.components.schemas.ExecutionContext.additionalProperties,
+    false,
+  );
 });
 
 test("all MCP route values are names instead of network addresses", async () => {

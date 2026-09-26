@@ -8,5 +8,8 @@
     "end_at": "2026-09-10T10:30:00+03:00",
     "time_zone": "Europe/Moscow"
   },
-  "requestKey": "calendar-demo-001"
+  "requestKey": "calendar-demo-001",
+  "context": {
+    "actorId": "28efc74e-e82b-4ea2-9143-4dc24c13fe0d"
+  }
 }
