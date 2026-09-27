@@ -9,6 +9,7 @@ nav:
   - MCP Gateway API: mcp-gateway.md
   - Agent Runtime API: agent-runtime.md
   - Channel Gateway API: channel-gateway.md
+  - Connection Service API: connection-service.md
   - Разработка: development.md
   - Эксплуатация: runbook.md
   - Миграции:
