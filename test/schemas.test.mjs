@@ -6,6 +6,7 @@ import addFormats from "ajv-formats";
 import YAML from "yaml";
 import {
   checkBreakingPolicy,
+  contractPath,
   readVersion,
 } from "../scripts/check-breaking-policy.mjs";
 
@@ -13,7 +14,7 @@ const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("breaking policy reads the real OpenAPI version", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
-  assert.equal(readVersion(source), "2.8.0");
+  assert.equal(readVersion(source), "3.0.0");
 });
 
 test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {
@@ -23,6 +24,23 @@ test("compatibility workflow skips policy when oasdiff finds no breaking changes
     workflow,
     /if: steps\.base-file\.outputs\.exists == 'true' && steps\.compatibility\.outputs\.breaking != 'No breaking changes'/,
   );
+});
+
+test("compatibility workflow checks the contract from the matrix", async () => {
+  const workflow = await readFile(".github/workflows/ci.yml", "utf8");
+
+  assert.match(
+    workflow,
+    /check-breaking-policy\.mjs "origin\/\$\{\{ github\.base_ref \}\}" "\$\{\{ matrix\.contract \}\}"/,
+  );
+});
+
+test("breaking policy accepts only a safe contract name", () => {
+  assert.equal(
+    contractPath("agent-runtime-api"),
+    "openapi/agent-runtime-api.yaml",
+  );
+  assert.throws(() => contractPath("../package"), /Некорректное имя/);
 });
 
 test("breaking change needs approval, new major and migration guide", () => {
