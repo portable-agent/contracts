@@ -13,7 +13,7 @@ const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("breaking policy reads the real OpenAPI version", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
-  assert.equal(readVersion(source), "2.7.0");
+  assert.equal(readVersion(source), "2.8.0");
 });
 
 test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {
@@ -132,12 +132,29 @@ test("action request uses the service request key", async () => {
   assert.equal(request.properties.requestKey.type, "string");
   assert.equal(request.properties.idempotencyKey, undefined);
   assert.deepEqual(request.properties.kind.enum, ["calendar.create_event"]);
-  assert.deepEqual(request.properties.connector.enum, ["fake-calendar"]);
+  assert.deepEqual(request.properties.connector.enum, [
+    "fake-calendar",
+    "google-calendar",
+  ]);
   assert.equal(
     request.properties.payload.$ref,
     "#/components/schemas/CalendarCreateEventPayload",
   );
   assert.ok(api.paths["/api/v1/actions"].post.responses["409"]);
+});
+
+test("agent can choose fake or Google calendar", async () => {
+  const source = await readFile("openapi/agent-runtime-api.yaml", "utf8");
+  const api = YAML.parse(source);
+  const requestConnectors =
+    api.components.schemas.UserContext.properties.availableConnectors.items;
+  const planConnector = api.components.schemas.ActionPlan.properties.connector;
+
+  assert.deepEqual(requestConnectors.enum, [
+    "fake-calendar",
+    "google-calendar",
+  ]);
+  assert.deepEqual(planConnector.enum, ["fake-calendar", "google-calendar"]);
 });
 
 test("action API uses the shared calendar payload shape", async () => {
