@@ -42,22 +42,24 @@ export const checkBreakingPolicy = ({
   }
 };
 
-export const run = (baseRef, approved) => {
-  const base = spawnSync(
-    "git",
-    ["show", `${baseRef}:openapi/action-api.yaml`],
-    {
-      encoding: "utf8",
-    },
-  );
+export const contractPath = (contractName) => {
+  if (!/^[a-z0-9-]+$/.test(contractName)) {
+    throw new Error("Некорректное имя OpenAPI-контракта.");
+  }
+  return `openapi/${contractName}.yaml`;
+};
+
+export const run = (baseRef, approved, contractName = "action-api") => {
+  const path = contractPath(contractName);
+  const base = spawnSync("git", ["show", `${baseRef}:${path}`], {
+    encoding: "utf8",
+  });
   if (base.status !== 0) {
     throw new Error(base.stderr || "Не удалось прочитать базовый OpenAPI.");
   }
 
   const baseVersion = readVersion(base.stdout);
-  const nextVersion = readVersion(
-    readFileSync("openapi/action-api.yaml", "utf8"),
-  );
+  const nextVersion = readVersion(readFileSync(path, "utf8"));
   checkBreakingPolicy({
     baseVersion,
     nextVersion,
@@ -67,5 +69,9 @@ export const run = (baseRef, approved) => {
 };
 
 if (process.argv[1]?.endsWith("check-breaking-policy.mjs")) {
-  run(process.argv[2], process.env.BREAKING_APPROVED === "true");
+  run(
+    process.argv[2],
+    process.env.BREAKING_APPROVED === "true",
+    process.argv[3],
+  );
 }
