@@ -29,7 +29,7 @@ OpenAPI в pull request с `main` и блокирует нарушение эт�
 
 ## Версии и release
 
-Текущая версия — `3.0.0`. Переход на Google Calendar описан в
+Текущая версия — `3.1.0`. Переход на Google Calendar описан в
 [migration guide](docs/migrations/3.0.0.md).
 
 Версия в `package.json`, OpenAPI и AsyncAPI должна совпадать. Тег `vX.Y.Z` запускает release workflow.
