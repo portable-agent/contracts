@@ -51,8 +51,21 @@ test("message response has ids and one typed reply", async () => {
   assert.deepEqual(reply.oneOf, [
     { $ref: "#/components/schemas/TextReply" },
     { $ref: "#/components/schemas/ConfirmationReply" },
+    { $ref: "#/components/schemas/ConnectionReply" },
   ]);
   assert.equal(reply.discriminator.propertyName, "type");
+});
+
+test("connection reply reuses the public widget schema", async () => {
+  const api = await readApi();
+  const reply = api.components.schemas.ConnectionReply;
+
+  assert.deepEqual(reply.required, ["type", "card"]);
+  assert.equal(reply.properties.type.const, "connection");
+  assert.equal(
+    reply.properties.card.$ref,
+    "../schemas/connection-widget.schema.json",
+  );
 });
 
 test("confirmation reply reuses the public widget schema", async () => {

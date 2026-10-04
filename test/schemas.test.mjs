@@ -14,7 +14,7 @@ const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
 test("breaking policy reads the real OpenAPI version", async () => {
   const source = await readFile("openapi/action-api.yaml", "utf8");
-  assert.equal(readVersion(source), "3.0.0");
+  assert.equal(readVersion(source), "4.0.0");
 });
 
 test("compatibility workflow skips policy when oasdiff finds no breaking changes", async () => {
@@ -197,6 +197,36 @@ test("action confirmation example matches its public schema", async () => {
   const valid = ajv.validate(schema, example);
 
   assert.equal(valid, true, JSON.stringify(ajv.errors));
+});
+
+test("connection widget example matches its public schema", async () => {
+  const ajv = new Ajv2020({ allErrors: true });
+  addFormats(ajv);
+  const schema = await readJson("schemas/connection-widget.schema.json");
+  const example = await readJson("examples/connection-widget.valid.json");
+
+  const valid = ajv.validate(schema, example);
+
+  assert.equal(valid, true, JSON.stringify(ajv.errors));
+});
+
+test("connection widget accepts only an HTTPS authorization URL", async () => {
+  const ajv = new Ajv2020({ allErrors: true });
+  addFormats(ajv);
+  const schema = await readJson("schemas/connection-widget.schema.json");
+  const example = await readJson("examples/connection-widget.valid.json");
+
+  assert.equal(
+    ajv.validate(schema, {
+      ...example,
+      button: { ...example.button, url: "http://example.com/oauth" },
+    }),
+    false,
+  );
+  assert.equal(
+    ajv.validate(schema, { ...example, state: "must-not-leak" }),
+    false,
+  );
 });
 
 test("confirmation widget rejects an altered payload hash", async () => {
