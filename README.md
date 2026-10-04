@@ -29,8 +29,8 @@ OpenAPI в pull request с `main` и блокирует нарушение эт�
 
 ## Версии и release
 
-Текущая версия — `3.1.0`. Переход на Google Calendar описан в
-[migration guide](docs/migrations/3.0.0.md).
+Текущая версия — `4.0.0`. Новый тип ответа подключения описан в
+[migration guide](docs/migrations/4.0.0.md).
 
 Версия в `package.json`, OpenAPI и AsyncAPI должна совпадать. Тег `vX.Y.Z` запускает release workflow.
 Он проверяет репозиторий и прикладывает к GitHub Release bundle `portable-agent-contracts-X.Y.Z.tgz`.
