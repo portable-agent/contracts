@@ -40,7 +40,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Problem"
         "502":
-          description: Agent Runtime или Action Service временно недоступен
+          description: Agent Runtime, Action Service или Connection Service временно недоступен
           content:
             application/json:
               schema:
