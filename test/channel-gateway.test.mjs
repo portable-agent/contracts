@@ -87,6 +87,24 @@ test("action decision reuses Action API request and response", async () => {
   assert.deepEqual(decide.security, [{ bearerAuth: [] }]);
 });
 
+test("action status is a small protected view without action payload", async () => {
+  const api = await readApi();
+  const route = api.paths["/api/v1/actions/{actionId}/status"].get;
+  const view = api.components.schemas.ActionStatusView;
+
+  assert.deepEqual(route.security, [{ bearerAuth: [] }]);
+  assert.equal(
+    route.responses["200"].content["application/json"].schema.$ref,
+    "#/components/schemas/ActionStatusView",
+  );
+  assert.ok(route.responses["401"]);
+  assert.ok(route.responses["404"]);
+  assert.deepEqual(view.required, ["actionId", "status", "kind", "title"]);
+  assert.equal(view.additionalProperties, false);
+  assert.equal(view.properties.payload, undefined);
+  assert.equal(view.properties.payloadHash, undefined);
+});
+
 test("compatibility workflow checks Channel Gateway contract", async () => {
   const workflow = await readFile(".github/workflows/ci.yml", "utf8");
 

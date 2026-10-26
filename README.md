@@ -29,8 +29,8 @@ OpenAPI в pull request с `main` и блокирует нарушение эт�
 
 ## Версии и release
 
-Текущая версия — `4.0.0`. Новый тип ответа подключения описан в
-[migration guide](docs/migrations/4.0.0.md).
+Текущая версия — `4.1.0`. Добавлено короткое состояние действия для всех каналов.
+Изменения предыдущей major-версии описаны в [migration guide](docs/migrations/4.0.0.md).
 
 Версия в `package.json`, OpenAPI и AsyncAPI должна совпадать. Тег `vX.Y.Z` запускает release workflow.
 Он проверяет репозиторий и прикладывает к GitHub Release bundle `portable-agent-contracts-X.Y.Z.tgz`.
